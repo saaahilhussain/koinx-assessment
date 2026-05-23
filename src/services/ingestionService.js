@@ -52,6 +52,7 @@ const buildTransaction = (row, source, runId) => {
   if (!type) issues.push('missing type');
   if (!asset) issues.push('missing asset');
   if (quantity === null) issues.push('invalid or missing quantity');
+  if (quantity !== null && quantity < 0) issues.push('negative quantity');
 
   return {
     runId,
