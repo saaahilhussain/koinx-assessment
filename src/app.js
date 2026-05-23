@@ -1,11 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
 import connectDB from './config/db.js';
+import reconciliationRoutes from './routes/reconciliation.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use('/', reconciliationRoutes);
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });

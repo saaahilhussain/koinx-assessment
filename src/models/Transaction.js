@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 
 const transactionSchema = new mongoose.Schema(
   {
+    runId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ReconciliationRun',
+      required: true,
+      index: true,
+    },
     source: {
       type: String,
       enum: ['user', 'exchange'],

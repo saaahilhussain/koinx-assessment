@@ -31,10 +31,10 @@ const isProximityMatch = (userTx, exTx, config) =>
   withinTimestamp(userTx.timestamp, exTx.timestamp, config.timestampToleranceSeconds) &&
   withinQuantity(userTx.quantity, exTx.quantity, config.quantityTolerancePct);
 
-const runMatching = async (config) => {
+const runMatching = async (config, runId) => {
   const [userTxs, exchangeTxs] = await Promise.all([
-    Transaction.find({ source: 'user', isValid: true }).lean(),
-    Transaction.find({ source: 'exchange', isValid: true }).lean(),
+    Transaction.find({ runId, source: 'user', isValid: true }).lean(),
+    Transaction.find({ runId, source: 'exchange', isValid: true }).lean(),
   ]);
 
   const matchedExchangeIds = new Set();

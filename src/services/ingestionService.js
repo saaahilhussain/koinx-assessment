@@ -29,7 +29,7 @@ const parseNumber = (raw) => {
   return isNaN(n) ? null : n;
 };
 
-const buildTransaction = (row, source) => {
+const buildTransaction = (row, source, runId) => {
   const id =
     row.id ?? row.transaction_id ?? row.txid ?? row.tx_id ?? null;
 
@@ -54,6 +54,7 @@ const buildTransaction = (row, source) => {
   if (quantity === null) issues.push('invalid or missing quantity');
 
   return {
+    runId,
     source,
     transactionId: id,
     timestamp,
@@ -68,13 +69,13 @@ const buildTransaction = (row, source) => {
   };
 };
 
-const ingestCSV = (filePath, source) =>
+const ingestCSV = (filePath, source, runId) =>
   new Promise((resolve, reject) => {
     const rows = [];
 
     fs.createReadStream(filePath)
       .pipe(parse({ columns: true, trim: true, skip_empty_lines: true }))
-      .on('data', (row) => rows.push(buildTransaction(row, source)))
+      .on('data', (row) => rows.push(buildTransaction(row, source, runId)))
       .on('error', reject)
       .on('end', async () => {
         try {
